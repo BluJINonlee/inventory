@@ -1,0 +1,56 @@
+
+
+<form name="scanItem" id="scanItem" onsubmit="return checkForEndRow()">
+  
+  <input type='text' id="scan" on/>
+  <input type='submit'/>
+  
+</form>
+<div id="message"></div>
+
+----
+
+
+//for on submit
+var lastInput = null;
+function checkForEndRow(){
+  
+  
+  var newTextBox;
+  var x = document.getElementById("scan").value;
+  var message = document.getElementById("message");
+  
+  message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ".";
+  
+  
+  
+  
+  if (lastInput == x){
+    //when last number is inserted twice, as a signal to end the entry, the last entry is omitted since it was just a signal.
+    document.getElementById("scan").parentNode.removeChild(document.getElementById("scan"));
+    message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ". True";
+    return true;
+  } else {
+    
+   
+    //create new textbox element
+    newTextBox = document.createElement("input");
+    newTextBox.type = "text";
+    
+    //append new before the submit button
+   document.getElementById("scan").parentNode.insertBefore(newTextBox, document.getElementById("submit")); 
+     //remove "scan" id from current scan textbox
+    document.getElementById("scan").removeAttribute("id");
+    //give new textbox "scan" id
+    newTextBox.setAttribute("id", "scan");
+    
+    
+    //give new elment focus
+    newTextBox.focus();
+  
+    message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ". " + (lastInput==x);
+    lastInput = x;
+    return false;
+  }
+  
+}

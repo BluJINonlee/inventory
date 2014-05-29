@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<script type="text/javascript">
+      function setFocus(){
+    document.getElementById("scan").focus();
+  }
+    </script>
+	</head>
+	<body onload="setFocus()">
+		<form name="scanItem" id="scanItem" onsubmit="return checkForEndRow()" action="updateInventory.php" method="POST">
+  
+  <input type='text' id="scan" name="1" on/>
+  <input type='submit' id="submit"/>
+  
+</form>
+<div id="message"></div>
+
+<script type="text/javascript">
+
+
+//for on submit
+var lastInput = null;
+var counter = 0;
+
+function checkForEndRow(){
+  var newTextBox;
+  var x = document.getElementById("scan").value;
+  var message = document.getElementById("message");
+  
+  message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ".";
+  
+
+  
+  
+  if (lastInput == x){
+    //when last number is inserted twice, as a signal to end the entry, the last entry is omitted since it was just a signal.
+     
+     
+    document.getElementById("scanItem").removeChild(document.getElementById("scan"));
+    message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ". True! Counter is at " + counter;
+    return true;
+
+  } else if(counter >= 2) {
+    
+    message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ". True! Counter is at " + counter;
+    return true;
+
+  } else {
+    
+    counter++;
+    //create new textbox element
+    newTextBox = document.createElement("input");
+    newTextBox.type = "text";
+    
+    
+     //remove "scan" id from current scan textbox
+    document.getElementById("scan").removeAttribute("id");
+    //give new textbox "scan" id
+    newTextBox.setAttribute("id", "scan");
+    newTextBox.setAttribute("name", counter+1);
+
+    //append new before the submit button
+   document.getElementById("scanItem").insertBefore(newTextBox, document.getElementById("submit")); 
+    
+    
+    //give new elment focus
+    newTextBox.focus();
+  
+    message.innerHTML = "This is what you put: " + x + ". Last Input is: " + lastInput + ". " + (lastInput==x)+ "! Counter is at " + counter;
+    
+    lastInput = x;
+    return false;
+  }
+  
+}
+</script>
+
+	</body>
+
+
+
+</html>
