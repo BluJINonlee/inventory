@@ -1,3 +1,5 @@
+<?php session_start() ?>
+
 <html>
 	<head>
 	</head>
@@ -6,54 +8,42 @@
 <form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="listRequest.php" method="POST">
   <!--change to checkForEndRow()-->
   <select name="site" id="site">
-    <option value="103">103</option>
-    <option value="ASH">ASH</option>
-    <option value="BEV">BEV</option>
-    <option value="CHP">CHP</option>
-    <option value="DIV">DIV</option>
-    <option value="DSP">DSP</option>
-    <option value="E63">E63</option>
-    <option value="E89">E89</option>
-    <option value="FAC">FAC</option>
-    <option value="FGL">FGL</option>
+    <option id='103' value="103">103</option>
+    <option id='ASH' value="ASH">ASH</option>
+    <option id='BEV' value="BEV">BEV</option>
+    <option id='CHP' value="CHP">CHP</option>
+    <option id='DIV' value="DIV">DIV</option>
+    <option id='DSP' value="DSP">DSP</option>
+    <option id='E63' value="E63">E63</option>
+    <option id='E89' value="E89">E89</option>
+    <option id='FAC' value="FAC">FAC</option>
+    <option id='FGL' value="FGL">FGL</option>
 
-    <option value="103">103</option>
-    <option value="ASH">ASH</option>
-    <option value="BEV">BEV</option>
-    <option value="CHP">CHP</option>
-    <option value="DIV">DIV</option>
-    <option value="DSP">DSP</option>
-    <option value="E63">E63</option>
-    <option value="E89">E89</option>
-    <option value="FAC">FAC</option>
-    <option value="FGL">FGL</option>
-
-
-    <option value="FRK">FRK</option>
-    <option value="HAR">HAR</option>
-    <option value="HOW">HOW</option>
-    <option value="JEF">JEF</option>
-    <option value="KED">KED</option>
-    <option value="KIM">KIM</option>
-    <option value="LAK">LAK</option>
-    <option value="LIN">LIN</option>
-    <option value="MAD">MAD</option>
-    <option value="MID">MID</option>
+    <option id='FRK' value="FRK">FRK</option>
+    <option id='HAR' value="HAR">HAR</option>
+    <option id='HOW' value="HOW">HOW</option>
+    <option id='JEF' value="JEF">JEF</option>
+    <option id='KED' value="KED">KED</option>
+    <option id='KIM' value="KIM">KIM</option>
+    <option id='LAK' value="LAK">LAK</option>
+    <option id='LIN' value="LIN">LIN</option>
+    <option id='MAD' value="MAD">MAD</option>
+    <option id='MID' value="MID">MID</option>
 
 
-    <option value="NPK">NPK</option>
-    <option value="OHR">OHR</option>
-    <option value="ORL">ORL</option>
-    <option value="RAC">RAC</option>
-    <option value="RSM">RSM</option>
-    <option value="S54">S54</option>
-    <option value="SKO">SKO</option>
-    <option value="SSH">SSH</option>
-    <option value="W74">W74</option>
+    <option id='MID' value="NPK">NPK</option>
+    <option id='OHR' value="OHR">OHR</option>
+    <option id='ORL' value="ORL">ORL</option>
+    <option id='RAC' value="RAC">RAC</option>
+    <option id='RSM' value="RSM">RSM</option>
+    <option id='S54' value="S54">S54</option>
+    <option id='SKO' value="SKO">SKO</option>
+    <option id='SSH' value="SSH">SSH</option>
+    <option id='W74' value="W74">W74</option>
     
-    <option value="W79">W79</option>
-    <option value="W95">W95</option>
-    <option value="WSH">WSH</option>
+    <option id='W79' value="W79">W79</option>
+    <option id='W95' value="W95">W95</option>
+    <option id='WSH' value="WSH">WSH</option>
   </select>
   
   <select name="location" id="location">
@@ -79,6 +69,15 @@
 </form>
 <div id="value"></div>
 
+
+
+
+
+
+
+
+
+
 <script type="text/javascript">
 	
 
@@ -91,6 +90,9 @@ var typeValue = document.getElementById("scanType");
 var counter = 1;
 var submit = document.getElementById("submit");
 var active = document.activeElement;
+var monitorModels = [ "17in", "19in","15in","20in","24in"];
+var pcModels = ["Optiplex 790","Optiplex 755", "Optiplex 780"];
+var html = "";
 
 //variables if type equals PC
 
@@ -113,37 +115,65 @@ function checkValue(){
 
 
 //find type and provide appropriate form. selectType() is called when page loads and when "scanType" input changes.
+
 function selectType(){
   
-
+document.getElementById("<?php ($_SESSION != null ? Print($_SESSION['site']): Print('KED')); ?>").setAttribute("selected", "selected");
 
   //creates form need for what is being input.
   if (typeValue.value == "pc"){
     var counter = 0;
     var deviceType = ["PC","Monitor","Printer"];
     scanForm.innerHTML ="";
-    while(counter < 3) {
     
-    var newModel = "<input id='model"+(counter+1)+"' name='model"+(counter+1)+"' placeholder='Model #'/>";
+    
+    var newModel = "<select id='model"+(counter+1)+"' name='model"+(counter+1)+"'>"
+    for(var i = 0; i < pcModels.length; i++){
+
+    	newModel += "<option value='"+pcModels[i]+"'>"+pcModels[i]+"</options>";
+		
+	}
+	newModel += "</select>";
     var newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
     var newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
-    
-    
-    
-      scanForm.innerHTML += newModel + newAsset + newSerial ;
-    
+    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
     counter++;
-  }
-   // scanForm.firstChild.focus();
+
+    //monitor
+
+    newModel = "<select id='model"+(counter+1)+"' name='model"+(counter+1)+"'>"
+    for(var i = 0; i < monitorModels.length; i++) {
+    	newModel += "<option value='"+monitorModels[i]+"'>"+ monitorModels[i]+"</options>";			
+	}
+	newModel += "</select>";
+    newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
+    newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
+    counter++;
+
+    //printer
+
+    newModel = "<input id='printerModel' name='model"+(counter+1)+"' placeholder='Model #'/>"; 
+    newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
+    newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";	    
+    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
+	counter++;
+	   
+  
+    scanForm.firstChild.nextSibling.focus();
 
 } else {
   if (typeValue.value == "monitor"){
-    scanForm.innerHTML = "Please enter monitor's: ";
+    html = "Please enter monitor's: <select name ='model'>";
+    for (var i = 0; i < monitorModels.length; i++){
+    	html += "<option value ='" + monitorModels[i]+"'>"+ monitorModels[i] +"</option>";
+    }
+    scanForm.innerHTML = html;
   } else {
-    scanForm.innerHTML = "Please enter printer's: ";
+    scanForm.innerHTML = "Please enter printer's: <input name='model' placeholder='Model #'/>";
   }
   
-  scanForm.innerHTML= scanForm.innerHTML + modelInput + assetInput + serialInput;
+  scanForm.innerHTML += assetInput + serialInput;
   scanForm.firstChild.focus();
   }
 }
@@ -172,6 +202,15 @@ function onEnter(){
     return true;
     
     
+    } else if (active.nextSibling.nodeName == "BR") {
+    	lastInput = active.value;
+    	if (active.nextSibling.nextSibling.nodeName == "SELECT"){
+    		active.nextSibling.nextSibling.nextSibling.focus();
+    	} else {
+
+    	active.nextSibling.nextSibling.focus();
+    	}
+    	return false;
     } else if (active.nextSibling == submit) {
       //create new row of input
       counter++;
