@@ -5,7 +5,7 @@
 	</head>
 	<!--List of all the CTA Site-->
 <body onload="selectType()">
-<form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="listRequest.php" method="POST">
+<form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="updateInventory.php" method="POST">
   <!--change to checkForEndRow()-->
   <select name="site" id="site">
     <option id='103' value="103">103</option>
@@ -47,12 +47,24 @@
   </select>
   
   <select name="location" id="location">
-    <option value="clerk">Clerks</option>
-    <option value="trans">Transportation</option>
-    <option value="maint">Maintanence</option>
-    <option value="office">Office</option>
-    <option value="training">Training</option>
-    <option value="class">Class Rooms</option>
+    <option id="clerk" value="clerk">Clerks</option>
+    <option id="transman" value="transman">Transportation Manager</option>
+    <option id="maint" value="maint">Maintanence</option>
+    <option id="maintman" value="maintman">Maintanence Manager</option>
+    <option id="office" value="office">Office</option>
+    <option id="training" value="training">Training</option>
+    <option id="instruction" value="instruction">Class Rooms</option>
+    <option id="stockroom" value="stockroom">Stock Room</option>
+    <option id="payroll" value="payroll">Payroll</option>
+    <option id="admin" value="admin">Admin Manager</option>
+    <option id="gm" value="gm">General Manager</option>
+    <option id="revmaint" value="revmaint">Revenue Maintenance</option>
+    <option id="BSM" value="BSM">BSM</option>
+    <option id="radio" value="radio">Radio Room</option>
+    <option id="fuel" value="fuel">Fuel Office</option>
+    <option id="yardmaster" value="yardmaster">Yard Master</option>
+    <option id="power-way" value="power-way">Power and Way</option>
+    <option id="signal" value="signal">Signal Room</option>
   </select>
   
   <select name="scanType" id="scanType" onchange="selectType()">
@@ -81,7 +93,7 @@
 <script type="text/javascript">
 	
 
-	var scanForm = document.getElementById("scanForm");
+var scanForm = document.getElementById("scanForm");
 
 var modelInput = "<input id='model' name='model' placeholder='Model #'/>";
 var assetInput = "<input id='asset' name='asset' placeholder='Asset Tag #'/>";
@@ -91,9 +103,16 @@ var counter = 1;
 var submit = document.getElementById("submit");
 var active = document.activeElement;
 var monitorModels = [ "17in", "19in","15in","20in","24in"];
-var pcModels = ["Optiplex 790","Optiplex 755", "Optiplex 780"];
+var pcModels = ["Dell Optiplex 790","Dell Optiplex 755", "Dell Optiplex 780", "Dell Latitude E6500", "Dell Latitude D820", "Dell Latitude D830", "Lenovo T430s", "Lenovo T600", "Lenovo T61", "Panasonic Toughbook" ];
 var html = "";
+var deviceType = ["monitor","printer"];
+var deviceSelect ="<select id='deviceSelect' name='deviceSelect'>";
 
+for (var i = 0; i < deviceType.length; i++){
+  deviceSelect += "<option id='"+deviceType[i]+"' value='"+deviceType[i]+"'>"+deviceType[i].toUpperCase()+"</option>";
+}
+
+deviceSelect += "</select>";
 //variables if type equals PC
 
 var lastInput = null;
@@ -118,12 +137,13 @@ function checkValue(){
 
 function selectType(){
   
-document.getElementById("<?php ($_SESSION != null ? Print($_SESSION['site']): Print('KED')); ?>").setAttribute("selected", "selected");
+document.getElementById("<?php ($_SESSION != null ? Print($_SESSION['site']): Print('FRK')); ?>").setAttribute("selected", "selected");
+document.getElementById("<?php ($_SESSION != null ? Print($_SESSION['location']): Print('BSM')); ?>").setAttribute("selected", "selected");
 
   //creates form need for what is being input.
   if (typeValue.value == "pc"){
     var counter = 0;
-    var deviceType = ["PC","Monitor","Printer"];
+    
     scanForm.innerHTML ="";
     
     
@@ -151,14 +171,27 @@ document.getElementById("<?php ($_SESSION != null ? Print($_SESSION['site']): Pr
     scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
     counter++;
 
-    //printer
+    //misc 1
 
-    newModel = "<input id='printerModel' name='model"+(counter+1)+"' placeholder='Model #'/>"; 
-    newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
-    newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";	    
-    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
-	counter++;
-	   
+   newModel = "<input name='model"+(counter+1)+"'' placeholder='Model #'/>";
+  newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
+  newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+  scanForm.innerHTML += deviceSelect + newModel + newAsset + newSerial + "<br/>" ;
+  document.getElementById("deviceSelect").setAttribute("name","misc1");
+  document.getElementById("deviceSelect").setAttribute("id","misc1");
+  counter++;
+
+  //misc 2
+
+  newModel = "<input name='model"+(counter+1)+"'' placeholder='Model #'/>";
+  newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
+  newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+  scanForm.innerHTML += deviceSelect + newModel + newAsset + newSerial + "<br/>" ;
+  document.getElementById("deviceSelect").setAttribute("name","misc2");
+  document.getElementById("deviceSelect").setAttribute("id","misc2");
+  counter++;
+
+
   
     scanForm.firstChild.nextSibling.focus();
 
