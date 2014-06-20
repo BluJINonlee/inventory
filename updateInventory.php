@@ -8,7 +8,7 @@ foreach ($_REQUEST as $name => $value){
 	echo $name . ": " . $value. "<br/>";
 
 } 
-echo "_SESION: ".$_SESSION["site"];
+echo "\$_SESSION: ".$_SESSION["site"];
 
 
 $con = mysqli_connect("localhost","root","","inventory");
@@ -41,7 +41,7 @@ if ($_REQUEST["scanType"] != "pc"){
 
 	}
 	$sql = "INSERT INTO $table (asset, serial, model, site, location) VALUES ('$asset', '$serial', '$model', '$site', '$location')";
-	ysqli_query($con, $sql);
+	mysqli_query($con, $sql);
 } else {
 	//if scanType is pc
 	$table = "pcs";
@@ -96,8 +96,8 @@ if ($_REQUEST["scanType"] != "pc"){
 if($error = mysqli_error($con)) {
 	echo $error;
 } else {
-	mysqli_commit($con);
+	//mysqli_commit($con);
 echo "Success!";
-header("Location: index.php");
+//header("Location: index.php");
 }
 ?>
