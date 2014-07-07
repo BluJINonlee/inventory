@@ -2,7 +2,6 @@
 //2 arrays listing all CTA cites, and realized area locations.
 $site = array("103","ASH","BEV","CHP","DIV","DSP","E63","E89","FAC","FLG","FRK","HAR","HOW","JEF","KED","KIM","LAK","LIN","MAD","MID","OHR","ORL","RAC","RSM","S54","SKO","SSH","W74","W79","W95","WSH");
 $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Manager","Offices","Training","Instruction","Stock Room","Payroll","Administrator Manager","General Manager","Revenue Maintenance","BSM","Radio","Yard Master","Power-Way","Signal");
-
 ?>
 <html>
 	<head>
@@ -11,7 +10,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	<body onload="selectType()">
 		
 		<form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="updateInventory.php" method="POST">
-		  <!--change to checkForEndRow()-->
+		  
 		  <select name="site" id="site">
 			<?php
 			/*creates a dropdown menu with all the sites and locations, and if one had been selected during a previous
@@ -38,7 +37,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			?>
 		   
 		  </select>
-		  
+		  <!-- Depending on this, the form that is produced changes to what input would be appropriate to the device(s) types-->
 		  <select name="scanType" id="scanType" onchange="selectType()">
 		    <option value="pc" default>Full Set (PC + Monitor + Printer)</option>
 		    <option value="monitor">Monitor Only</option>
@@ -211,29 +210,32 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	
 	} else {
 	  if (typeValue.value == "monitor"){
-	    html = "Please enter monitor's: <select name ='model'>";
+	    html = "Please enter monitor's: <select name ='model' id='model' onchange='ifOther()'>";
 	    for (var i = 0; i < monitorModels.length; i++){
 		html += "<option value ='" + monitorModels[i]+"'>"+ monitorModels[i] +"</option>";
 	    }
+	    html += "<option value='other'>other</option></select>";
 	    scanForm.innerHTML = html;
 	} else if (typeValue.value == "printer") {
-	    html = "Please enter printer's: <select name='model' onchange='ifOther()'>";
+	    html = "Please enter printer's: <select name='model' id='model' onchange='ifOther()'>";
 	    for (var i = 0; i < printerModels.length; i++){
 		html += "<option value ='" + printerModels[i]+"'>"+ printerModels[i] +"</option>";
 	    }
 	    html += "<option value='other'>other</option></select>";
 	    scanForm.innerHTML = html;
 	  } else {
-		html = "Please enter printer's: <select name='model' onchange ='ifOther()'>";
+		html = "Please enter printer's: <select name='model' id='model' onchange ='ifOther()'>";
 		for (var i = 0; i < netPrinterModels.length; i++){
 		html += "<option value ='" + netPrinterModels[i]+"'>"+ netPrinterModels[i] +"</option>";
 	    }
-	    html += "</option>";
+	    html += "<option value='other'>other</option></select>";
 	    scanForm.innerHTML = html;
 	  }
 	  
-	  scanForm.innerHTML += assetInput + serialInput;
-	  scanForm.firstChild.focus();
+	  scanForm.innerHTML += "<span id='newModelSpan'></span>" + assetInput + serialInput;
+	  ifOther();
+	  
+	  //scanForm.firstChild.focus();
 	  }
 	}
 	
@@ -298,23 +300,34 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	    
 	    
 	    } else {
-	    if(document.activeElement.nextSibling != document.getElementById("submit")) {
+	    if(document.activeElement.nextSibling != document.getElementById("submit")&& document.activeElement.parentNode != document.getElementById("newModelSpan")) {
 	      
 	      document.activeElement.nextSibling.focus();
 	      return false;
 	     
+	    } else if (document.activeElement.parentNode == document.getElementById("newModelSpan")) {
+		document.getElementById("newModelSpan").nextSibling.focus();
+		return false;
+	    } else {
+		return true;
 	    }
 	  }
 	}
 	
 	function ifOther() {
-		if (this.value == "other") {
-			var newModel = document.createElement("input");
-			document.getElementById("model").removeAttribute("id");
-			newModel.setAttribute("id", "model");
-			document.insertBefore(newDevice,this.nextSibling);
+		var newModel = document.getElementById("newModelSpan");
+		if (document.getElementById("model").value == "other") {
+			
+			newModel.innerHTML = "<input id='newModel' name='newModel' placeholder='New Model'/>";
+			/*var currentModel = document.getElementById("model");
+			var newModel = document.createElement("input");			
+			document.insertBefore(newModel,currentModel.nextSibling);
+			currentModel.removeAttribute("id");
+			newModel.setAttribute("id", "model");*/
+			document.getElementById("newModel").focus();
 		} else {
-			selectType();
+			newModel.innerHTML = "";
+			document.getElementById("asset").focus();
 		}
 		
 	}

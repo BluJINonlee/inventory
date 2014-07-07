@@ -26,7 +26,13 @@ if ($_REQUEST["scanType"] != "pc"){
 
 	$asset = $_REQUEST["asset"];
 	$serial = $_REQUEST["serial"];
-	$model = $_REQUEST["model"];
+	$model;
+	if ($_REQUEST["newModel"]){
+		$model = $_REQUEST["newModel"];
+	} else {
+		$model = $_REQUEST["model"];
+	}
+	
 	
 	$table;
 	//if the type is a monitor scan
