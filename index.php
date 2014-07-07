@@ -160,35 +160,34 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	    
 	    scanForm.innerHTML ="";
 	    
-	    
-	    var newModel = "<select id='model"+(counter+1)+"' name='model"+(counter+1)+"'>"
+	    //pc
+	    var newModel = "<select id='pcModel' name='pcModel' onchange='ifOtherPC()'>"
 	    for(var i = 0; i < pcModels.length; i++){
 	
 		newModel += "<option value='"+pcModels[i]+"'>"+pcModels[i]+"</options>";
 			
 		}
-		newModel += "</select>";
-	    var newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
-	    var newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+		newModel += "<option value='other'>other</option></select><span id='newPCModelSpan'></span>";
+	    var newAsset = "<input id='pcAsset' name='pcAsset' placeholder='Asset Tag #'/>";
+	    var newSerial = "<input id='pcSerial' name='pcSerial' placeholder='Serial #'/>";
 	    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
 	    counter++;
-	
+	    
 	    //monitor
-	
-	    newModel = "<select id='model"+(counter+1)+"' name='model"+(counter+1)+"'>"
+	    newModel = "<select id='monitorModel' name='monitorModel' onchange='ifOtherMonitor()'>"
 	    for(var i = 0; i < monitorModels.length; i++) {
 		newModel += "<option value='"+monitorModels[i]+"'>"+ monitorModels[i]+"</options>";			
 		}
-		newModel += "</select>";
-	    newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
-	    newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
-	    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
-	    counter++;
+	  newModel += "<option value='other'>other</option></select><span id='newMonitorModelSpan'></span>";
+	  newAsset = "<input id='monitorAsset' name='monitorAsset' placeholder='Asset Tag #'/>";
+	  newSerial = "<input id='monitorSerial' name='monitorSerial' placeholder='Serial #'/>";
+	  scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
+	  counter++;
 	
 	    //misc 1
-	    newModel = "<input name='model"+(counter+1)+"'' placeholder='Model #'/>";
-	  newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
-	  newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+	  newModel = "<input id='model3' name='model3' placeholder='Model #'/>";
+	  newAsset = "<input id='asset3' name='asset3' placeholder='Asset Tag #'/>";
+	  newSerial = "<input id='serial3' name='serial3' placeholder='Serial #'/>";
 	  scanForm.innerHTML += deviceSelect + newModel + newAsset + newSerial + "<br/>" ;
 	  document.getElementById("deviceSelect").setAttribute("name","misc1");
 	  document.getElementById("deviceSelect").setAttribute("id","misc1");
@@ -196,9 +195,9 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	
 	  //misc 2
 	
-	  newModel = "<input name='model"+(counter+1)+"'' placeholder='Model #'/>";
-	  newAsset = "<input id='asset"+(counter+1)+"' name='asset"+(counter+1)+"' placeholder='Asset Tag #'/>";
-	  newSerial = "<input id='serial"+(counter+1)+"' name='serial"+(counter+1)+"' placeholder='Serial #'/>";
+	  newModel = "<input id='model4' name='model4' placeholder='Model #'/>";
+	  newAsset = "<input id='asset4' name='asset' placeholder='Asset Tag #'/>";
+	  newSerial = "<input id='serial4' name='serial4' placeholder='Serial #'/>";
 	  scanForm.innerHTML += deviceSelect + newModel + newAsset + newSerial + "<br/>" ;
 	  document.getElementById("deviceSelect").setAttribute("name","misc2");
 	  document.getElementById("deviceSelect").setAttribute("id","misc2");
@@ -314,16 +313,35 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	  }
 	}
 	
+	function ifOtherPC() {
+		var newPCModel = document.getElementById("newPCModelSpan");
+		if (document.getElementById("pcModel").value == "other") {
+			
+			newPCModel.innerHTML = "<input id='newPCModel' name='newPCModel' placeholder='New Model'/>";
+			document.getElementById("newPCModel").focus();
+		} else {
+			newPCModel.innerHTML = "";
+			document.getElementById("pcAsset").focus();
+		}
+	}
+	
+	function ifOtherMonitor() {
+		var newMonitorModel = document.getElementById("newMonitorModelSpan");
+		if (document.getElementById("monitorModel").value == "other") {
+			
+			newMonitorModel.innerHTML = "<input id='newMonitorModel' name='newMonitorModel' placeholder='New Model'/>";
+			document.getElementById("newMonitorModel").focus();
+		} else {
+			newMonitorModel.innerHTML = "";
+			document.getElementById("monitorAsset").focus();
+		}
+	}
+	
 	function ifOther() {
-		var newModel = document.getElementById("newModelSpan");
+		
 		if (document.getElementById("model").value == "other") {
 			
 			newModel.innerHTML = "<input id='newModel' name='newModel' placeholder='New Model'/>";
-			/*var currentModel = document.getElementById("model");
-			var newModel = document.createElement("input");			
-			document.insertBefore(newModel,currentModel.nextSibling);
-			currentModel.removeAttribute("id");
-			newModel.setAttribute("id", "model");*/
 			document.getElementById("newModel").focus();
 		} else {
 			newModel.innerHTML = "";

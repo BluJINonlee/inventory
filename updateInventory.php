@@ -54,15 +54,28 @@ if ($_REQUEST["scanType"] != "pc"){
 	$results = mysqli_query($con, "SELECT COUNT(*) FROM pcs");
 	$setCount = mysqli_fetch_array($results);
 	$newSID = $setCount[0]+1;
-	$asset1 = $_REQUEST["asset1"];
-	$serial1 = $_REQUEST["serial1"];
-	$model1 = $_REQUEST["model1"];
-	$asset2 = $_REQUEST["asset2"];
-	$serial2 = $_REQUEST["serial2"];
-	$model2 = $_REQUEST["model2"];
+	$asset1 = $_REQUEST["pcAsset"];
+	$serial1 = $_REQUEST["pcSerial"];
+	$model1;
+	if ($newPCModel = $_REQUEST["newPCModel"]){
+		$model1 = $newPCModel;
+	} else {
+		$model1 = $_REQUEST["pcModel"];
+	}
+	$asset2 = $_REQUEST["monitorAsset"];
+	$serial2 = $_REQUEST["monitorSerial"];
+	$model2;
+	if ($newMonitorModel = $_REQUEST["newMonitorModel"]){
+		$model2 = $newMonitorModel;
+	} else {
+		$model2 = $_REQUEST["monitorModel"];
+	}
 	$asset3 = $_REQUEST["asset3"];
 	$serial3 = $_REQUEST["serial3"];
 	$model3 = $_REQUEST["model3"];
+	$asset4 = $_REQUEST["asset4"];
+	$serial4 = $_REQUEST["serial4"];
+	$model4 = $_REQUEST["model4"];
 
 
 
@@ -92,7 +105,7 @@ if ($_REQUEST["scanType"] != "pc"){
 			$table = "Printers";
 		}
 		
-		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset3', '$serial3', '$model3', '$site', '$location'); ";
+		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset4', '$serial4', '$model4', '$site', '$location'); ";
 		mysqli_query($con, $sql);
 	}
 }
