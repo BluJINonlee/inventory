@@ -7,7 +7,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	<head>
 	</head>
 	
-	<body onload="selectType()">
+	<body onload="selectType();ifOtherMonitor();ifOtherPC()">
 		
 		<form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="updateInventory.php" method="POST">
 		  
@@ -248,45 +248,39 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	function onEnter(){
 	  active = document.activeElement;
 	  if (typeValue.value == "pc") {
-	    //create another if statement to see if the set is done.
+		//create another if statement to see if the set is done.
 	    
 	    
 	   
 	    //document.getElementById("value").innerHTML = active.value + " Last Input: " + lastInput;
-	    
 	    if (lastInput == active.value){
-	    //when last number is inserted twice, as a signal to end the entry, the last entry is omitted since it was just a signal.
-	      //clear active element, then return true.
-	     
-	    active.value = "";
-	    return true;
+		//when last number is inserted twice as a signal to end the entry, the last entry is omitted then form is submitted.
+		//clear active element, then return true.
+		active.value = "";
+		return true;
 	    
-	    
+	    //if the next element is a break...
 	    } else if (active.nextSibling.nodeName == "BR") {
+		//record input in the lastInput variable
 		lastInput = active.value;
+		
+		//if the element after a break is a dropdown menu...
 		if (active.nextSibling.nextSibling.nodeName == "SELECT"){
+			//activate the third element after that, which will be the next textbox.
 			active.nextSibling.nextSibling.nextSibling.focus();
 		} else {
-	
-		active.nextSibling.nextSibling.focus();
+			//if not, go to the element after next, which should be a textbox.
+			active.nextSibling.nextSibling.focus();
 		}
+		//user is able to input the next field after pressing enter.
 		return false;
-	    } else if (active.nextSibling == submit) {
-	      //create new row of input
-	      counter++;
-	      var newModel = document.createElement("input");
-	      var newAsset = document.createElement("input");
-	      var newSerial = document.createElement("input");
-	      
-	      newModel.setAttribute("name","model"+counter);
-	      newAsset.setAttribute("name","asset"+counter);
-	      newSerial.setAttribute("name","serial"+counter);
-	      
-	      scanForm.insertBefore(newModel,submit);
-	      scanForm.insertBefore(newAsset,submit);
-	      scanForm.insertBefore(newSerial,submit);
-	      lastInput = active.value;
-	      return false;
+		//else, if the active element is in "newPCModelSpan"...
+	    } else if (active == document.getElementById("newPCModel")) {
+		    document.getElementById("newPCModelSpan").nextSibling.focus();
+		    return false;
+	    } else if (active == document.getElementById("newMonitorModel")) {
+		    document.getElementById("newMonitorModelSpan").nextSibling.focus();
+		    return false;
 	    } else {
 	      
 	      lastInput = active.value;
@@ -338,7 +332,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	}
 	
 	function ifOther() {
-		
+		var newModel = document.getElementById("newModelSpan");
 		if (document.getElementById("model").value == "other") {
 			
 			newModel.innerHTML = "<input id='newModel' name='newModel' placeholder='New Model'/>";
