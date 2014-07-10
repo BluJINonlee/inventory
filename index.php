@@ -172,7 +172,6 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	    var newSerial = "<input id='pcSerial' name='pcSerial' placeholder='Serial #'/>";
 	    scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
 	    counter++;
-	    
 	    //monitor
 	    newModel = "<select id='monitorModel' name='monitorModel' onchange='ifOtherMonitor()'>"
 	    for(var i = 0; i < monitorModels.length; i++) {
@@ -183,8 +182,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	  newSerial = "<input id='monitorSerial' name='monitorSerial' placeholder='Serial #'/>";
 	  scanForm.innerHTML += newModel + newAsset + newSerial + "<br/>" ;
 	  counter++;
-	
-	    //misc 1
+	  //misc 1
 	  newModel = "<input id='model3' name='model3' placeholder='Model #'/>";
 	  newAsset = "<input id='asset3' name='asset3' placeholder='Asset Tag #'/>";
 	  newSerial = "<input id='serial3' name='serial3' placeholder='Serial #'/>";
@@ -192,11 +190,9 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	  document.getElementById("deviceSelect").setAttribute("name","misc1");
 	  document.getElementById("deviceSelect").setAttribute("id","misc1");
 	  counter++;
-	
 	  //misc 2
-	
 	  newModel = "<input id='model4' name='model4' placeholder='Model #'/>";
-	  newAsset = "<input id='asset4' name='asset' placeholder='Asset Tag #'/>";
+	  newAsset = "<input id='asset4' name='asset4' placeholder='Asset Tag #'/>";
 	  newSerial = "<input id='serial4' name='serial4' placeholder='Serial #'/>";
 	  scanForm.innerHTML += deviceSelect + newModel + newAsset + newSerial + "<br/>" ;
 	  document.getElementById("deviceSelect").setAttribute("name","misc2");
@@ -265,22 +261,14 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 		lastInput = active.value;
 		
 		//if the element after a break is a dropdown menu...
-		if (active.nextSibling.nextSibling.nodeName == "SELECT"){
-			//activate the third element after that, which will be the next textbox.
-			active.nextSibling.nextSibling.nextSibling.focus();
-		} else {
-			//if not, go to the element after next, which should be a textbox.
-			active.nextSibling.nextSibling.focus();
-		}
+		active.nextSibling.nextSibling.nextSibling.nextSibling.focus();
+		
 		//user is able to input the next field after pressing enter.
 		return false;
 		//else, if the active element is in "newPCModelSpan"...
-	    } else if (active == document.getElementById("newPCModel")) {
-		    document.getElementById("newPCModelSpan").nextSibling.focus();
-		    return false;
-	    } else if (active == document.getElementById("newMonitorModel")) {
-		    document.getElementById("newMonitorModelSpan").nextSibling.focus();
-		    return false;
+	    } else if (document.activeElement.parentNode == document.getElementById("newPCModelSpan")) {
+		document.getElementById("newPCModelSpan").nextSibling.focus();
+		return false;
 	    } else {
 	      
 	      lastInput = active.value;

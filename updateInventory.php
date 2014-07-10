@@ -70,23 +70,26 @@ if ($_REQUEST["scanType"] != "pc"){
 	} else {
 		$model2 = $_REQUEST["monitorModel"];
 	}
-	$asset3 = $_REQUEST["asset3"];
+	$asset3 = $_REQUEST["asset3"]; //first misc item
 	$serial3 = $_REQUEST["serial3"];
 	$model3 = $_REQUEST["model3"];
-	$asset4 = $_REQUEST["asset4"];
+	$asset4 = $_REQUEST["asset4"];//second misc item
 	$serial4 = $_REQUEST["serial4"];
 	$model4 = $_REQUEST["model4"];
 
 
 
-
+	//inserts pc info into DB
 	$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset1', '$serial1', '$model1', '$site', '$location') ";
 	mysqli_query($con, $sql);
-	if ($_REQUEST["asset2"] != null || $_REQUEST["asset2"] != "") {
+	
+	//if any, inserts monititor info into DB
+	if ($asset2 != null || $asset2 != "") {
 		$table = "monitors";
 		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset2', '$serial2', '$model2', '$site', '$location'); ";
 		mysqli_query($con, $sql);
 	}
+	//if any, inserts first misc item into DB
 	if ($_REQUEST["asset3"] != null || $_REQUEST["asset3"] != "") {
 		if($_REQUEST["misc1"] == "monitor"){
 			$table = "Monitors";
@@ -97,14 +100,13 @@ if ($_REQUEST["scanType"] != "pc"){
 		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset3', '$serial3', '$model3', '$site', '$location'); ";
 		mysqli_query($con, $sql);
 	}
-
+	//if any, inserts second misc itme into DB
 	if ($_REQUEST["asset4"] != null || $_REQUEST["asset4"] != "") {
 		if($_REQUEST["misc2"] == "monitor"){
 			$table = "Monitors";
 		} else {
 			$table = "Printers";
 		}
-		
 		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,'$asset4', '$serial4', '$model4', '$site', '$location'); ";
 		mysqli_query($con, $sql);
 	}
@@ -115,8 +117,8 @@ if ($_REQUEST["scanType"] != "pc"){
 if($error = mysqli_error($con)) {
 	echo $error;
 } else {
-	//mysqli_commit($con);
+	mysqli_commit($con);
 echo "Success!";
-//header("Location: index.php");
+header("Location: index.php");
 }
 ?>
