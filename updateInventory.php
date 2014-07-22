@@ -28,7 +28,7 @@ function ifNull ($data) {
 }
 
 
-$setCount = mysqli_query($con, "SELECT count(*)");
+$setCount = mysqli_query($con, "SELECT max(*) from pcs");
 
 if ($_REQUEST["scanType"] != "pc"){
 
