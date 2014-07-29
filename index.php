@@ -335,7 +335,38 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			return moveFocus(node.nextSibling);
 		}
 	}
-	
 	</script>
+	
+	<?php
+		function listTable ($table) {
+			$con = mysqli_connect("localhost", "root", "", "inventory");
+			$results = mysqli_query($con, "SELECT id, sid, site, location, model, asset, serial FROM $table");
+			echo "<table>
+				<tr>
+					<th>Site</th>
+					<th>Location</th>
+					<th>Model</th>
+					<th>Asset</th>
+					<th>Serial</th>
+					<th>Set ID</th>
+				</tr>
+				";
+			while($row = mysqli_fetch_array($results)) {
+				echo "<tr>
+					<td>{$row['site']}</td>
+					<td>{$row['location']}</td>
+					<td>{$row['model']}</td>
+					<td>{$row['asset']}</td>
+					<td>{$row['serial']}</td>
+					<td>{$row['sid']}</td>
+					<td><a href='updateForm.php?sid={$row['sid']}&site={$row['site']}&location={$row['location']}&model={$row['model']}&asset={$row['asset']}&serial={$row['serial']}&id={$row['id']}&deviceType=pcs'>EDIT</a></td>
+				</tr>
+				";
+			}
+			echo "</table>";
+		}
+		listTable("pcs");
+	?>
+	
 	</body>
 </html>
