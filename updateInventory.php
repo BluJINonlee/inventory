@@ -129,8 +129,8 @@ if ($_REQUEST["scanType"] != "pc"){
 if($error = mysqli_error($con)) {
 	echo $error;
 } else {
-	//mysqli_commit($con);
+	mysqli_commit($con);
 	echo "Success!";
-	//header("Location: index.php");
+	header("Location: index.php");
 }
 ?>

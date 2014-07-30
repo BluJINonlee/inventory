@@ -14,8 +14,9 @@ echo "
                 <label for='model'>Model: </label><input type='text' name='model' id='model' value='{$_REQUEST['model']}'/><br/>
                 <label for='asset'>Asset Tag #: </label><input type='text' name='asset' id='asset' value='{$_REQUEST['asset']}'/><br/>
                 <label for='serial'>Serial #: </label><input type='text' name='serial' id='serial' value='{$_REQUEST['serial']}'/><br/>
-                <label for='sid'>Set ID: </label><input type='text' name='sid' id='sid' value='{$_REQUEST['sid']}'/><br/>
-                <input type='submit'/>
+    ";
+                echo ($_REQUEST['deviceType'] != "netPrinters" ? "<label for='sid'>Set ID: </label><input type='text' name='sid' id='sid' value='{$_REQUEST['sid']}'/><br/>" : "");
+                echo "<input type='submit'/> <a href='index.php'>Cancel</a>
             </form>
         
         

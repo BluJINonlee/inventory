@@ -5,6 +5,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 ?>
 <html>
 	<head>
+		<link href="style.css" rel="stylesheet" type="text/css" />
 	</head>
 	
 	<body onload="selectType();ifOtherMonitor();ifOtherPC()">
@@ -335,12 +336,30 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			return moveFocus(node.nextSibling);
 		}
 	}
+	
+	function confirmDelete() {
+		var message = "Are you sure you want to delete?";
+		return confirm(message);
+	}
 	</script>
 	
 	<?php
 		function listTable ($table) {
 			$con = mysqli_connect("localhost", "root", "", "inventory");
-			$results = mysqli_query($con, "SELECT id, sid, site, location, model, asset, serial FROM $table");
+			$results;
+			$sql;
+			$sid;
+			
+			if ($table == "netPrinters") {
+				$sql = "SELECT id, site, location, model, asset, serial FROM $table";
+				$sid="";
+			}  else {
+				$sql = "SELECT id, sid, site, location, model, asset, serial FROM $table";
+				
+			}
+			
+			$results = mysqli_query($con, $sql);
+			echo "<h1>".strtoupper($table),"</h1>";
 			echo "<table>
 				<tr>
 					<th>Site</th>
@@ -357,15 +376,19 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 					<td>{$row['location']}</td>
 					<td>{$row['model']}</td>
 					<td>{$row['asset']}</td>
-					<td>{$row['serial']}</td>
-					<td>{$row['sid']}</td>
-					<td><a href='updateForm.php?sid={$row['sid']}&site={$row['site']}&location={$row['location']}&model={$row['model']}&asset={$row['asset']}&serial={$row['serial']}&id={$row['id']}&deviceType=pcs'>EDIT</a></td>
+					<td>{$row['serial']}</td><td>";
+					(isset($row['sid']) ? $sid = $row['sid'] : $sid = "");
+					echo "$sid</td><td><a href='updateForm.php?sid=$sid&site={$row['site']}&location={$row['location']}&model={$row['model']}&asset={$row['asset']}&serial={$row['serial']}&id={$row['id']}&deviceType=$table'>EDIT</a></td><td><a href='deleteEntry.php?id={$row['id']}&deviceType=$table' onclick = 'return confirmDelete()'>DELETE</a>
 				</tr>
 				";
 			}
 			echo "</table>";
 		}
-		listTable("pcs");
+		
+		listTable("pcs");		
+		listTable("monitors");		
+		listTable("printers");
+		listTable("netPrinters");
 	?>
 	
 	</body>
