@@ -95,7 +95,7 @@ if ($_REQUEST["scanType"] != "pc"){
 	//if any, inserts monititor info into DB
 	if ($asset2 != null || $asset2 != "") {
 		$table = "monitors";
-		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset2, $serial2, $model2, '$site', '$location'); ";
+		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset2, $serial2, '$model2', '$site', '$location'); ";
 		mysqli_query($con, $sql);
 		echo $sql."<br/>";
 	}
