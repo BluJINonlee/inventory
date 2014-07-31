@@ -3,6 +3,9 @@ session_start();
 $_SESSION["site"] = $_REQUEST["site"];
 $_SESSION["location"] = $_REQUEST["location"];
 
+if (isset($_REQUEST['model'])) {
+	$_SESSION['model'] = $_REQUEST['model'];
+}
 foreach ($_REQUEST as $name => $value){
 	echo $name . ": " . $value. "<br/>";
 

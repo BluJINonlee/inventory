@@ -64,8 +64,8 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	
 	<script type="text/javascript">
 	var pcModels = ["Dell Optiplex 790"];
-	var printerModels = ["17in"];
-	var monitorModels = [];
+	var printerModels = [];
+	var monitorModels = ["17in"];
 	var netPrinterModels = [];
 	
 	<?php
@@ -145,7 +145,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	var submit = document.getElementById("submit");
 	var active = document.activeElement;
 	var html = "";
-	var deviceType = ["monitor","printer"];
+	var deviceType = ["printer","monitor"];
 	var deviceSelect ="<select id='deviceSelect' name='deviceSelect'>";
 	
 	for (var i = 0; i < deviceType.length; i++){
