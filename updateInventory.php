@@ -2,6 +2,7 @@
 session_start();
 $_SESSION["site"] = $_REQUEST["site"];
 $_SESSION["location"] = $_REQUEST["location"];
+include_once("ifNull.php");
 
 if (isset($_REQUEST['model'])) {
 	$_SESSION['model'] = $_REQUEST['model'];
@@ -22,13 +23,7 @@ $model;
 $site = $_REQUEST["site"];
 $location = $_REQUEST["location"];
 
-function ifNull ($data) {
-	if ($data == "" || $data == null){
-		return "NULL";
-	} else {
-		return "'".$data."'";
-	}
-}
+
 
 
 $setCount = mysqli_query($con, "SELECT max(*) from pcs");
