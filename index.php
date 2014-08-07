@@ -351,10 +351,10 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			$sid;
 			
 			if ($table == "netPrinters") {
-				$sql = "SELECT id, site, location, model, asset, serial FROM $table";
+				$sql = "SELECT id, site, location, model, asset, serial, lastUpdate FROM $table";
 				$sid="";
 			}  else {
-				$sql = "SELECT id, sid, site, location, model, asset, serial FROM $table";
+				$sql = "SELECT id, sid, site, location, model, asset, serial, lastUpdate FROM $table";
 				
 			}
 			
@@ -368,6 +368,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 					<th>Asset</th>
 					<th>Serial</th>
 					<th>Set ID</th>
+					<th>Date</th>
 				</tr>
 				";
 			while($row = mysqli_fetch_array($results)) {
@@ -378,7 +379,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 					<td>{$row['asset']}</td>
 					<td>{$row['serial']}</td><td>";
 					(isset($row['sid']) ? $sid = $row['sid'] : $sid = "");
-					echo "$sid</td><td><a href='updateForm.php?sid=$sid&site={$row['site']}&location={$row['location']}&model={$row['model']}&asset={$row['asset']}&serial={$row['serial']}&id={$row['id']}&deviceType=$table'>EDIT</a></td><td><a href='deleteEntry.php?id={$row['id']}&deviceType=$table' onclick = 'return confirmDelete()'>DELETE</a>
+					echo "$sid</td><td>{$row['lastUpdate']}</td><td><a href='updateForm.php?sid=$sid&site={$row['site']}&location={$row['location']}&model={$row['model']}&asset={$row['asset']}&serial={$row['serial']}&id={$row['id']}&deviceType=$table'>EDIT</a></td><td><a href='deleteEntry.php?id={$row['id']}&deviceType=$table' onclick = 'return confirmDelete()'>DELETE</a>
 				</tr>
 				";
 			}

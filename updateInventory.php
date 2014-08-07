@@ -2,7 +2,9 @@
 session_start();
 $_SESSION["site"] = $_REQUEST["site"];
 $_SESSION["location"] = $_REQUEST["location"];
+//include_once("connectDatabase.php");
 include_once("ifNull.php");
+include_once("entry.php");
 
 if (isset($_REQUEST['model'])) {
 	$_SESSION['model'] = $_REQUEST['model'];
@@ -12,63 +14,58 @@ foreach ($_REQUEST as $name => $value){
 
 } 
 echo "\$_SESSION: ".$_SESSION["site"];
-
-
-$con = mysqli_connect("localhost","root","","inventory");
-mysqli_autocommit($con, false);
 $sql;
 $asset;
 $serial;
 $model;
 $site = $_REQUEST["site"];
 $location = $_REQUEST["location"];
+$table;
+$sid = Entry::getSID();
+echo $sid;
 
 
-
-
-$setCount = mysqli_query($con, "SELECT max(*) from pcs");
 
 if ($_REQUEST["scanType"] != "pc"){
-
-	$asset = ifNull($_REQUEST["asset"]);
-	$serial = ifNull($_REQUEST["serial"]);
+	$asset = $_REQUEST["asset"];
+	$serial = $_REQUEST["serial"];
 	$model;
-	if ($_REQUEST["newModel"]){
+	if (isset($_REQUEST["newModel"])){
 		$model = $_REQUEST["newModel"];
 	} else {
 		$model = $_REQUEST["model"];
 	}
-	
-	
-	$table;
-	//if the type is a monitor scan
+	//determines what table the entry is inserted into
 	if ($_REQUEST["scanType"]=="monitor"){
 		$table = "Monitors";
-
 	} else if ($_REQUEST["scanType"]=="printer"){
 		$table = "Printers";
-
 	} else if ($_REQUEST["scanType"]=="netPrinter"){
 		$table = "NetPrinters";
-
 	}
-	//to-do: after changing MySQL's lastUpdate to DATE type, either make the default in MySQL curdate(), or make every new entry curdate() when inserting in PHP
-	$sql = "INSERT INTO $table (asset, serial, model, site, location) VALUES ($asset, $serial, '$model', '$site', '$location')";
-	mysqli_query($con, $sql);
+	//create new entry class with the $_REQUEST variables
+	$item = New Entry($table,$site,$location,$model,$asset,$serial,null,null,$sid);
+	$item->submit();
+	
 } else {
 	//if scanType is pc
+	$item1;
+	$item2;
+	$item3;
+	$item4;
 	$table = "pcs";
-	$results = mysqli_query($con, "SELECT COUNT(*) FROM pcs");
-	$setCount = mysqli_fetch_array($results);
-	$newSID = $setCount[0]+1;
-	$asset1 = ifNull($_REQUEST["pcAsset"]);
-	$serial1 = ifNull($_REQUEST["pcSerial"]);
+	$sid = Entry::getSID();
+	$asset1 = $_REQUEST["pcAsset"];
+	$serial1 = $_REQUEST["pcSerial"];
 	$model1;
 	if ($newPCModel = $_REQUEST["newPCModel"]){
 		$model1 = $newPCModel;
 	} else {
 		$model1 = $_REQUEST["pcModel"];
 	}
+	
+	
+	
 	$asset2 = $_REQUEST["monitorAsset"];
 	$serial2 = $_REQUEST["monitorSerial"];
 	$model2;
@@ -77,25 +74,21 @@ if ($_REQUEST["scanType"] != "pc"){
 	} else {
 		$model2 = $_REQUEST["monitorModel"];
 	}
-	$asset3 = ifNull($_REQUEST["asset3"]); //first misc item
-	$serial3 = ifNull($_REQUEST["serial3"]);
-	$model3 = ifNull($_REQUEST["model3"]);
-	$asset4 = ifNull($_REQUEST["asset4"]);//second misc item
-	$serial4 = ifNull($_REQUEST["serial4"]);
-	$model4 = ifNull($_REQUEST["model4"]);
+	$asset3 = $_REQUEST["asset3"]; //first misc item
+	$serial3 = $_REQUEST["serial3"];
+	$model3 = $_REQUEST["model3"];
+	$asset4 = $_REQUEST["asset4"];//second misc item
+	$serial4 = $_REQUEST["serial4"];
+	$model4 = $_REQUEST["model4"];
 
 
 
 	//inserts pc info into DB
-	$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset1, $serial1, '$model1', '$site', '$location') ";
-	mysqli_query($con, $sql);
-	echo $sql."<br/>";
+	$item1 = new Entry($table,$site,$location,$model1,$asset1,$serial2,null,null,$sid);
 	//if any, inserts monititor info into DB
 	if ($asset2 != null || $asset2 != "") {
 		$table = "monitors";
-		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset2, $serial2, '$model2', '$site', '$location'); ";
-		mysqli_query($con, $sql);
-		echo $sql."<br/>";
+		$item2 = new Entry($table, $site, $location, $model2, $asset2, $serial2, null, null, $sid);
 	}
 	//if any, inserts first misc item into DB
 	if (($_REQUEST["asset3"] != null || $_REQUEST["asset3"] != "") || ($_REQUEST["serial3"] != null || $_REQUEST["serial3"] != "")) {
@@ -105,9 +98,7 @@ if ($_REQUEST["scanType"] != "pc"){
 			$table = "Printers";
 		}
 		
-		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset3, $serial3, $model3, '$site', '$location'); ";
-		mysqli_query($con, $sql);
-		echo $sql."<br/>";
+		$item3 = new Entry($table, $site, $location, $model3, $asset3, $serial3, null, null, $sid);
 	}
 	//if any, inserts second misc itme into DB
 	if (($_REQUEST["asset4"] != null || $_REQUEST["asset4"] != "") || ($_REQUEST["serial4"] != null || $_REQUEST["serial4"] != "")) {
@@ -116,19 +107,18 @@ if ($_REQUEST["scanType"] != "pc"){
 		} else {
 			$table = "Printers";
 		}
-		$sql = "INSERT INTO $table (sid, asset, serial, model, site, location) VALUES ($newSID,$asset4, $serial4, $model4, '$site', '$location'); ";
-		mysqli_query($con, $sql);
-		echo $sql."<br/>";
+		$item4 = new Entry($table, $site, $location, $model4, $asset4, $serial4, null, null, $sid);
 	}
 }
 
-
-
-if($error = mysqli_error($con)) {
-	echo $error;
-} else {
-	mysqli_commit($con);
-	echo "Success!";
-	header("Location: index.php");
+try{
+	$item1->submit();
+	$item2->submit();
+	$item3->submit();
+	$item4->submit();
+} catch (Exception $e) {
+	echo $e;
 }
+
+
 ?>
