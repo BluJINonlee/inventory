@@ -51,6 +51,8 @@ if ($_REQUEST["scanType"] != "pc"){
 	
 } else {
 	//if scanType is pc
+	
+	$items = [];
 	$item1;
 	$item2;
 	$item3;
@@ -86,11 +88,11 @@ if ($_REQUEST["scanType"] != "pc"){
 
 
 	//inserts pc info into DB
-	$item1 = new Entry($table,$site,$location,$model1,$asset1,$serial2,$lastName,$firstName,$sid);
+	array_push($items, new Entry($table,$site,$location,$model1,$asset1,$serial2,$lastName,$firstName,$sid));
 	//if any, inserts monititor info into DB
 	if ($asset2 != null || $asset2 != "") {
 		$table = "monitors";
-		$item2 = new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid);
+		array_push($items, new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid));
 	}
 	//if any, inserts first misc item into DB
 	if (($_REQUEST["asset3"] != null || $_REQUEST["asset3"] != "") || ($_REQUEST["serial3"] != null || $_REQUEST["serial3"] != "")) {
@@ -100,7 +102,7 @@ if ($_REQUEST["scanType"] != "pc"){
 			$table = "Printers";
 		}
 		
-		$item3 = new Entry($table, $site, $location, $model3, $asset3, $serial3, $lastName, $firstName, $sid);
+		array_push($items, new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid));
 	}
 	//if any, inserts second misc itme into DB
 	if (($_REQUEST["asset4"] != null || $_REQUEST["asset4"] != "") || ($_REQUEST["serial4"] != null || $_REQUEST["serial4"] != "")) {
@@ -109,15 +111,14 @@ if ($_REQUEST["scanType"] != "pc"){
 		} else {
 			$table = "Printers";
 		}
-		$item4 = new Entry($table, $site, $location, $model4, $asset4, $serial4, $lastName, $firstName, $sid);
+		array_push($items, new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid));
 	}
 }
 
 try{
-	$item1->submit();
-	$item2->submit();
-	$item3->submit();
-	$item4->submit();
+	for ($i = 0; $i < sizeof($items); $i++) {
+		$items[$i]->submit();
+	}
 } catch (Exception $e) {
 	echo $e;
 }
