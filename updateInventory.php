@@ -116,9 +116,9 @@ try{
 	for ($i = 0; $i < sizeof($items); $i++) {
 		$items[$i]->submit();
 	}
-	
+	header("Location: index.php?$e");
 } catch (Exception $e) {
-	header("Location: index.php?$e"); 
+	echo $e; 
 }
 
 
