@@ -63,9 +63,9 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 	
 	
 	<script type="text/javascript">
-	var pcModels = ["Dell Optiplex 790"];
+	var pcModels = ["Dell Optiplex 790", "Dell Optiplex 755", "Dell Optiplex 780"];
 	var printerModels = [];
-	var monitorModels = ["17in"];
+	var monitorModels = ["17in", "19in", "19in Wide", "20in"];
 	var netPrinterModels = [];
 	
 	<?php

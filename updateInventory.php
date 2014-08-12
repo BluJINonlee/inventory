@@ -53,6 +53,7 @@ if ($_REQUEST["scanType"] != "pc"){
 	$item2;
 	$item3;
 	$item4;
+	$items = [];
 	$table = "pcs";
 	$sid = Entry::getSID();
 	$asset1 = $_REQUEST["pcAsset"];
@@ -115,8 +116,9 @@ try{
 	for ($i = 0; $i < sizeof($items); $i++) {
 		$items[$i]->submit();
 	}
+	
 } catch (Exception $e) {
-	echo $e;
+	header("Location: index.php?$e"); 
 }
 
 
