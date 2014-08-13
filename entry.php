@@ -54,7 +54,7 @@
             
             if ($error = mysqli_error($con)){
                 
-                echo $error;
+                echo $error."<br/>".$this->table;
             } else {
                 mysqli_commit($con);
                 echo "Success!";

@@ -21,7 +21,7 @@ $model;
 $site = $_REQUEST["site"];
 $location = $_REQUEST["location"];
 $table;
-$sid = Entry::getSID();
+$sid = null;
 echo $sid;
 
 
@@ -37,11 +37,11 @@ if ($_REQUEST["scanType"] != "pc"){
 	}
 	//determines what table the entry is inserted into
 	if ($_REQUEST["scanType"]=="monitor"){
-		$table = "Monitors";
+		$table = "monitors";
 	} else if ($_REQUEST["scanType"]=="printer"){
-		$table = "Printers";
+		$table = "printers";
 	} else if ($_REQUEST["scanType"]=="netPrinter"){
-		$table = "NetPrinters";
+		$table = "netPrinters";
 	}
 	//create new entry class with the $_REQUEST variables
 	$item = New Entry($table,$site,$location,$model,$asset,$serial,null,null,$sid);
@@ -85,7 +85,7 @@ if ($_REQUEST["scanType"] != "pc"){
 
 
 	//inserts pc info into DB
-	array_push($items, new Entry($table,$site,$location,$model1,$asset1,$serial2,$lastName,$firstName,$sid));
+	array_push($items, new Entry($table,$site,$location,$model1,$asset1,$serial1,$lastName,$firstName,$sid));
 	//if any, inserts monititor info into DB
 	if ($asset2 != null || $asset2 != "") {
 		$table = "monitors";
@@ -99,7 +99,7 @@ if ($_REQUEST["scanType"] != "pc"){
 			$table = "Printers";
 		}
 		
-		array_push($items, new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid));
+		array_push($items, new Entry($table, $site, $location, $model3, $asset3, $serial3, $lastName, $firstName, $sid));
 	}
 	//if any, inserts second misc itme into DB
 	if (($_REQUEST["asset4"] != null || $_REQUEST["asset4"] != "") || ($_REQUEST["serial4"] != null || $_REQUEST["serial4"] != "")) {
@@ -108,7 +108,7 @@ if ($_REQUEST["scanType"] != "pc"){
 		} else {
 			$table = "Printers";
 		}
-		array_push($items, new Entry($table, $site, $location, $model2, $asset2, $serial2, $lastName, $firstName, $sid));
+		array_push($items, new Entry($table, $site, $location, $model4, $asset4, $serial4, $lastName, $firstName, $sid));
 	}
 }
 
@@ -116,7 +116,7 @@ try{
 	for ($i = 0; $i < sizeof($items); $i++) {
 		$items[$i]->submit();
 	}
-	header("Location: index.php?$e");
+	//header("Location: index.php?$e");
 } catch (Exception $e) {
 	echo $e; 
 }
