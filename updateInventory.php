@@ -1,7 +1,7 @@
 <?php
 session_start();
 $_SESSION["site"] = $_REQUEST["site"];
-$_SESSION["location"] = $_REQUEST["location"];
+$_SESSION["location"] = ( $_REQUEST["newLocation"] ? $_REQUEST["newLocation"] : $_REQUEST["location"]) ;
 //include_once("connectDatabase.php");
 include_once("ifNull.php");
 include_once("entry.php");
@@ -19,7 +19,12 @@ $asset;
 $serial;
 $model;
 $site = $_REQUEST["site"];
-$location = $_REQUEST["location"];
+//$location = $_REQUEST["location"];
+if ($newLocation = $_REQUEST["newLocation"]){
+		$location = $newLocation;
+	} else {
+		$location = $_REQUEST["location"];
+	}
 $table;
 $sid = null;
 echo $sid;
@@ -116,7 +121,7 @@ try{
 	for ($i = 0; $i < sizeof($items); $i++) {
 		$items[$i]->submit();
 	}
-	//header("Location: index.php?$e");
+	header("Location: index.php?$e");
 } catch (Exception $e) {
 	echo $e; 
 }

@@ -1,8 +1,38 @@
+<script>
+	var locations = [];
+
 <?php session_start();
 //2 arrays listing all CTA cites, and realized area locations.
 $site = array("103","ASH","BEV","CHP","DIV","DSP","E63","E89","FAC","FLG","FRK","HAR","HOW","JEF","KED","KIM","LAK","LIN","MAD","MID","OHR","ORL","RAC","RSM","S54","SKO","SSH","W74","W79","W95","WSH");
-$location = array("Clerk","Transportation Manager","Maintenance","Maintenance Manager","Offices","Training","Instruction","Stock Room","Payroll","Administrator Manager","General Manager","Revenue Maintenance","BSM","Radio","Yard Master","Power-Way","Signal");
+$location = array();
+//array("Clerk","Transportation Manager","Maintenance","Maintenance Manager","Offices","Training","Instruction","Stock Room","Payroll","Administrator Manager","General Manager","Revenue Maintenance","BSM","Radio","Yard Master","Power-Way","Signal");
+
+$locationSQL = "
+SELECT Location FROM Pcs
+UNION
+SELECT Location FROM Monitors 
+UNION
+SELECT Location FROM Printers
+UNION
+SELECT Location FROM netPrinters
+";
+$con = mysqli_connect("localhost","root","","inventory");
+$locationResults = mysqli_query($con, $locationSQL);
+if ($error = mysqli_error($con)) {
+	echo $error;
+} else {
+
+	while($row = mysqli_fetch_array($locationResults)) {
+		array_push($location, $row[0]);
+		echo $row[0];
+	}
+	array_push($location,"other");
+}
 ?>
+
+
+</script>
+
 <html>
 	<head>
 		<link href="style.css" rel="stylesheet" type="text/css" />
@@ -27,7 +57,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			}
 			?>
 		  </select>
-		  <select name="location" id="location">
+		  <select name="location" id="location" onchange="ifOtherLocation()">
 			<?php
 			for($i=0; $i < sizeof($location); $i++){
 				echo "<option id='{$location[$i]}' value='{$location[$i]}'";
@@ -38,6 +68,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 			?>
 		   
 		  </select>
+		  <span id="newLocationSpan"></span>
 		  <!-- Depending on this, the form that is produced changes to what input would be appropriate to the device(s) types-->
 		  <select name="scanType" id="scanType" onchange="selectType()">
 		    <option value="pc" default>Full Set (PC + Monitor + Printer)</option>
@@ -52,7 +83,7 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 		  <input type="submit" id="submit"/>
 		</form>
 	<div id="value"></div>
-	
+	<?php echo $_GET["e"]; ?>
 	
 	
 	
@@ -275,6 +306,17 @@ $location = array("Clerk","Transportation Manager","Maintenance","Maintenance Ma
 		} else {
 			newPCModel.innerHTML = "";
 			document.getElementById("pcAsset").focus();
+		}
+	}
+	
+	function ifOtherLocation() {
+		var newLocation = document.getElementById("newLocationSpan");
+		if (document.getElementById("location").value == "other") {
+			
+			newLocation.innerHTML = "<input id='newLocation' name='newLocation' placeholder='New Location'/>";
+			document.getElementById("newLocation").focus();
+		} else {
+			newLocation.innerHTML = "";
 		}
 	}
 	
