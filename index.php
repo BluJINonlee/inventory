@@ -38,7 +38,7 @@ if ($error = mysqli_error($con)) {
 		<link href="style.css" rel="stylesheet" type="text/css" />
 	</head>
 	
-	<body onload="selectType();ifOtherMonitor();ifOtherPC()">
+	<body onload="selectType();ifOtherMonitor();ifOtherPC();ifOtherLocation();">
 		
 		<form name="scanItem" id="scanItem" onsubmit="return onEnter()" action="updateInventory.php" method="POST">
 		  
