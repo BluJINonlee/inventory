@@ -367,15 +367,36 @@ if ($error = mysqli_error($con)) {
 		//Question is, though, how to give an approriate name for the serverside code to properly insert data into the database
 		//to output, we can either create a new div in the code, and append the code, or use document.write().
 	}
-	
+	//switches focus to sequential input fields until either a submit button is found, or end of the HTML/PHP file
 	function moveFocus(node) {
-		if (node.nextSibling == document.getElementById("submit")){
+		var nextElement = node.nextSibling;
+		
+		//if the next sibling is the submit button (ie has the id "submit"), submit the form.
+		if (nextElement == document.getElementById("submit")){
 			return true;
-		}else if(node.nextSibling.nodeName == "INPUT") {
-			node.nextSibling.focus();
+			
+		//if the next element has children and is not a dropdown menu...
+		}else if (nextElement.hasChildNodes() && nextElement.nodeName != "SELECT") {
+			//if the first child is an input field element and is not hidden, give the first child focus.
+			if (nextElement.firstChild.nodeName == "INPUT" && nextElement.firstChild.getAttribute("type") != "hidden") {
+				
+				nextElement.firstChild.focus();
+				return false;
+				
+			} else {
+				//else, run the test for the next element
+				return moveFocus(nextElement.firstChild);
+			}
+		//if the current element is the last child of parent element, the parent is ran through the test for the next element.
+		} else if (node == node.parent.lastChild) {
+			return moveFocus(node.parent);
+			//if the next element is a valid input field, it is given focus.
+		}else if(nextElement.nodeName == "INPUT" && nextElement.getAttribute("type") != "hidden") {
+			nextElement.focus();
 			return false;
+		//else, continue the search
 		} else {
-			return moveFocus(node.nextSibling);
+			return moveFocus(nextElement);
 		}
 	}
 	
