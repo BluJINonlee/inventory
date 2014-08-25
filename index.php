@@ -3,7 +3,7 @@
 
 <?php session_start();
 //2 arrays listing all CTA cites, and realized area locations.
-$site = array("103","ASH","BEV","CHP","DIV","DSP","E63","E89","FAC","FLG","FRK","HAR","HOW","JEF","KED","KIM","LAK","LIN","MAD","MID","OHR","ORL","RAC","RSM","S54","SKO","SSH","W74","W79","W95","WSH");
+$site = array("103","ASH","BEV","CHP","DIV","DSP","E63","E89","FAC","FGL","FRK","HAR","HOW","JEF","KED","KIM","LAK","LIN","MAD","NPK", "MID","OHR","ORL","RAC","RSM","S54","SKO","SSH","W74","W79","W95","WSH");
 $location = array();
 //array("Clerk","Transportation Manager","Maintenance","Maintenance Manager","Offices","Training","Instruction","Stock Room","Payroll","Administrator Manager","General Manager","Revenue Maintenance","BSM","Radio","Yard Master","Power-Way","Signal");
 
